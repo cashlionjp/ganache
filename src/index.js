@@ -61,6 +61,7 @@ const stylesheets = [
   "./Elements/Spinner.css",
   "./Elements/FilePicker.scss",
   "./Elements/StyledSelect.scss",
+  "./Elements/ChecksumAddress.scss",
   "./Components/FirstRun/FirstRunScreen.scss",
   "./Components/AppShell/AppShell.scss",
   "./Components/AppShell/TopNavbar.scss",

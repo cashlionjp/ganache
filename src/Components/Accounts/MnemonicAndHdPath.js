@@ -1,12 +1,15 @@
 import React, { PureComponent } from 'react'
 import MnemonicInfoModal from './MnemonicInfoModal'
 import OnlyIf from '../../Elements/OnlyIf'
+import { requestCopyToClipboard } from '../../Actions/Core'
 
 export default class MnemonicAndHdPath extends PureComponent {
   constructor (props) {
     super(props)
+    this.timeout = null; 
     this.state = {
-      showWarning: false
+      showWarning: false,
+      display: this.props.mnemonic,
     }
   }
 
@@ -21,14 +24,41 @@ export default class MnemonicAndHdPath extends PureComponent {
       showWarning: false
     })
   }
+  
+  copy = () => {
+    requestCopyToClipboard(this.props.mnemonic);
+    this.displayCopyNotice()
+  }
+
+  displayCopyNotice = () => { 
+    this.timeout = setTimeout(() => { 
+      this.displayMnemonic();
+      this.timeout = null;
+    }, 1000);
+    this.setState({ 
+      display: "Copied to clipboard!"
+    });
+   }
+
+  displayMnemonic = () => {
+    this.setState({
+      display: this.props.mnemonic
+    })
+  }
+
+  componentWillUnmount = () => { 
+    if(this.timeout) {
+      clearTimeout(this.timeout);
+    }
+  }
 
   render () {
     return (
       <section className="MnemonicAndHdPath">
         <div className="Mnemonic">
           <h4>MNEMONIC <span className="WarningIndicator" onClick={this.showWarning.bind(this)}>?</span></h4>
-          <span>
-            {this.props.mnemonic}
+          <span onDoubleClick={this.copy}>
+            {this.state.display}
           </span>
         </div>
         <div className="HDPath">
